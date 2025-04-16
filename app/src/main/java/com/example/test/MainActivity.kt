@@ -20,9 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main) // sakam, ka izmantosim tieši šo izkārtojumu
 
-        // Initialize UI components
         playerOneNameInput = findViewById(R.id.player_one_name)
         playerTwoNameInput = findViewById(R.id.player_two_name)
         modeSelection = findViewById(R.id.mode_selection)
@@ -30,43 +29,41 @@ class MainActivity : AppCompatActivity() {
         pvcMode = findViewById(R.id.pvc_mode)
         startGameButton = findViewById(R.id.start_game_button)
 
-        // Set initial mode to PvP
+        // atrod visus XML komponentus un tos piešķir mainīgajiem
+
         pvpMode.isChecked = true
 
-        // Event listeners
         modeSelection.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.pvc_mode) {
                 playerTwoNameInput.isEnabled = false
-                playerTwoNameInput.setText("Computer")
+                playerTwoNameInput.setText("Dators")
             } else {
                 playerTwoNameInput.isEnabled = true
                 playerTwoNameInput.setText("")
             }
-        }
+        } // skatoties, kas ir izvēlēts, ļāuj ievadīt attiecīgo lauku vārdus
 
         startGameButton.setOnClickListener {
             startGame()
         }
     }
 
-    private fun startGame() {
+    private fun startGame() { // sākas pati spēle
         val playerOneName = playerOneNameInput.text.toString().trim()
         val playerTwoName = playerTwoNameInput.text.toString().trim()
 
-        // Validation
         if (playerOneName.isEmpty()) {
-            Toast.makeText(this, "Please enter Player 1's name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Lūdzu ievadi 1. spēlētāja vārdu", Toast.LENGTH_SHORT).show()
             return
         }
-
+        // pārbauda kāds ir gamemode un sāk nodot tālāk mainīgos uz "spēles īsto sākumu"
         if (pvpMode.isChecked && playerTwoName.isEmpty()) {
-            Toast.makeText(this, "Please enter Player 2's name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Lūdzu ievadi 2. spēlētāja vārdu", Toast.LENGTH_SHORT).show()
             return
         }
 
         val isPvC = pvcMode.isChecked
 
-        // Start game activity with player names and mode
         val intent = Intent(this, GameActivity::class.java).apply {
             putExtra("PLAYER_ONE_NAME", playerOneName)
             putExtra("PLAYER_TWO_NAME", playerTwoName)

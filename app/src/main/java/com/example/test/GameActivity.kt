@@ -12,11 +12,12 @@ import java.util.Random
 
 class GameActivity : AppCompatActivity() {
 
+    // spēles galvenie mainīgie
     private lateinit var buttons: Array<Array<Button>>
     private lateinit var playerOneName: String
     private lateinit var playerTwoName: String
     private var isPvCMode: Boolean = false
-    private var playerOneTurn: Boolean = true // X always goes first
+    private var playerOneTurn: Boolean = true
     private var roundCount: Int = 0
     private lateinit var statusText: TextView
 
@@ -24,15 +25,16 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // Get player names and game mode from intent
         playerOneName = intent.getStringExtra("PLAYER_ONE_NAME") ?: "Player 1"
         playerTwoName = intent.getStringExtra("PLAYER_TWO_NAME") ?: "Player 2"
         isPvCMode = intent.getBooleanExtra("IS_PVC_MODE", false)
+        // ir iegūti vārdi un spēles režīms
 
         statusText = findViewById(R.id.status_text)
         updateStatusText()
 
-        // Initialize buttons array
+        // inicializē 9 "pogas", liek X un O, pārbauda vai nav nospiests aizņemts lauks un
+        // pārbauda vai kāds nav uzvarējis pēc katra gājiena
         buttons = Array(3) { row ->
             Array(3) { col ->
                 val buttonID = "button_$row$col"
@@ -64,9 +66,7 @@ class GameActivity : AppCompatActivity() {
                         playerOneTurn = !playerOneTurn
                         updateStatusText()
 
-                        // If it's computer's turn in PvC mode
                         if (isPvCMode && !playerOneTurn) {
-                            // Delay computer move slightly for better UX
                             Handler(Looper.getMainLooper()).postDelayed({
                                 computerMove()
                             }, 500)
@@ -77,30 +77,29 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
-        // Show custom greeting
         showGreetingMessage()
 
-        // Setup reset button
         findViewById<Button>(R.id.reset_button).setOnClickListener {
             resetGame()
         }
     }
 
+
     private fun showGreetingMessage() {
         val greeting = buildString {
-            append("Welcome to Tic-Tac-Toe!\n\n")
+            append("Vai esi gatavs uzvarēt?\n\n")
 
             if (isPvCMode) {
-                append("$playerOneName, get ready to challenge the computer!")
+                append("$playerOneName, pamēģini uzvarēt datoru ;) !")
             } else {
-                append("$playerOneName vs $playerTwoName\nMay the best player win!")
+                append("$playerOneName vs $playerTwoName\nKurš nu uzvarēs :0 !")
             }
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Game Started")
+            .setTitle("Spēles sākums")
             .setMessage(greeting)
-            .setPositiveButton("Let's Play!", null)
+            .setPositiveButton("Sākt spēli!", null)
             .show()
     }
 
@@ -112,6 +111,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    // tiešā pārbaude vai kāds nav uzvarējis
     private fun checkForWin(): Boolean {
         val field = Array(3) { row ->
             Array(3) { col ->
@@ -119,26 +119,22 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
-        // Check rows
         for (i in 0..2) {
             if (field[i][0] == field[i][1] && field[i][0] == field[i][2] && field[i][0] != "") {
                 return true
             }
         }
 
-        // Check columns
         for (i in 0..2) {
             if (field[0][i] == field[1][i] && field[0][i] == field[2][i] && field[0][i] != "") {
                 return true
             }
         }
 
-        // Check diagonal (top-left to bottom-right)
         if (field[0][0] == field[1][1] && field[0][0] == field[2][2] && field[0][0] != "") {
             return true
         }
 
-        // Check diagonal (top-right to bottom-left)
         if (field[0][2] == field[1][1] && field[0][2] == field[2][0] && field[0][2] != "") {
             return true
         }
@@ -146,39 +142,42 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
+    // ja uzvar 1. spēlētājs
     private fun playerOneWins() {
         AlertDialog.Builder(this)
-            .setTitle("Game Over")
-            .setMessage("$playerOneName Wins! 🎉")
-            .setPositiveButton("Play Again") { _, _ -> resetGame() }
-            .setNegativeButton("Return to Menu") { _, _ -> finish() }
+            .setTitle("Spēle beidzās")
+            .setMessage("$playerOneName, Tu UZVARĒJI! 🎉")
+            .setPositiveButton("Spēlēt atkal?") { _, _ -> resetGame() }
+            .setNegativeButton("Uz izvēlni") { _, _ -> finish() }
             .setCancelable(false)
             .show()
     }
 
+    // ja uzvar 2. spēlētājs
     private fun playerTwoWins() {
-        val winner = if (isPvCMode) "Computer" else playerTwoName
+        val winner = if (isPvCMode) "Dators" else playerTwoName
         AlertDialog.Builder(this)
-            .setTitle("Game Over")
-            .setMessage("$winner Wins! 🎉")
-            .setPositiveButton("Play Again") { _, _ -> resetGame() }
-            .setNegativeButton("Return to Menu") { _, _ -> finish() }
+            .setTitle("Spēle beidzās")
+            .setMessage("$winner uzvarēja...")
+            .setPositiveButton("Spēlēt atkal?") { _, _ -> resetGame() }
+            .setNegativeButton("Uz izvēlni") { _, _ -> finish() }
             .setCancelable(false)
             .show()
     }
 
+    // ja ir neizšķirts
     private fun draw() {
         AlertDialog.Builder(this)
-            .setTitle("Game Over")
-            .setMessage("It's a Draw! 🤝")
-            .setPositiveButton("Play Again") { _, _ -> resetGame() }
-            .setNegativeButton("Return to Menu") { _, _ -> finish() }
+            .setTitle("Spēle beidzās")
+            .setMessage("Neizšķirts! 🤝")
+            .setPositiveButton("Spēlēt atkal?") { _, _ -> resetGame() }
+            .setNegativeButton("Uz izvēlni") { _, _ -> finish() }
             .setCancelable(false)
             .show()
     }
 
+    // notīra visus laukus un norestartē roundCount
     fun resetGame() {
-        // Clear the board
         for (i in 0..2) {
             for (j in 0..2) {
                 buttons[i][j].text = ""
@@ -191,29 +190,25 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun computerMove() {
-        // Check if there's a winning move
         if (tryToWin()) {
             return
         }
 
-        // Block player's winning move
         if (tryToBlock()) {
             return
         }
 
-        // Try to take center if available
         if (buttons[1][1].text.toString() == "") {
             buttons[1][1].text = "O"
             afterComputerMove()
             return
         }
 
-        // Make a random move
         makeRandomMove()
     }
 
+    // ja ir iespēja liek O, lai uzvarētu
     private fun tryToWin(): Boolean {
-        // Check if computer can win in one move
         for (i in 0..2) {
             for (j in 0..2) {
                 if (buttons[i][j].text.toString() == "") {
@@ -229,8 +224,8 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
+    // ja nav iespēja uzvarēt, tad cenšas bloķēt liekot O
     private fun tryToBlock(): Boolean {
-        // Check if player can win in one move and block
         for (i in 0..2) {
             for (j in 0..2) {
                 if (buttons[i][j].text.toString() == "") {
@@ -247,6 +242,7 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
+    // citādi izpilda nejaušu gājienu
     private fun makeRandomMove() {
         val random = Random()
         var row: Int
@@ -261,6 +257,7 @@ class GameActivity : AppCompatActivity() {
         afterComputerMove()
     }
 
+    // saprot spēles stāvokli, attiecīgi izdara vienu no 3 darbībām
     private fun afterComputerMove() {
         roundCount++
 

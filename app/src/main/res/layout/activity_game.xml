@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- apraksta pogu fontu, izmēru, virzienu un pēc vajadzības padding un margin -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -125,7 +127,7 @@
         android:id="@+id/reset_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reset Game"
+        android:text="NODZĒST VISUS LAUKUS"
         android:layout_marginTop="32dp"
         android:onClick="resetGame"/>
 

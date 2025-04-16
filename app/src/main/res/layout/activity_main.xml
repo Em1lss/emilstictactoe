@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- apraksta pogu fontu, izmēru, virzienu un pēc vajadzības padding un margin, kā arī teksta ziņojumi šeit tiek definēti -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome to Tic-Tac-Toe!"
+        android:text="Spēlējam Desas!"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -20,7 +22,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Game Mode:"
+        android:text="Izvēlies Game mode:"
         android:textSize="18sp"
         android:layout_marginBottom="8dp"/>
 
@@ -34,46 +36,46 @@
             android:id="@+id/pvp_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Player vs Player"/>
+            android:text="Spēlētājs vs Spēlētājs"/>
 
         <RadioButton
             android:id="@+id/pvc_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Player vs Computer"/>
+            android:text="Spēlētājs vs Dators"/>
     </RadioGroup>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Player 1 Name (X):"
+        android:text="1. Spēlētāja vārds -> (X):"
         android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/player_one_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter name"
+        android:hint="Ievadi vārdu"
         android:layout_marginBottom="16dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Player 2 Name (O):"
+        android:text="2. Spēlētāja vārds -> (O):"
         android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/player_two_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter name"
+        android:hint="Ievadi vārdu"
         android:layout_marginBottom="32dp"/>
 
     <Button
         android:id="@+id/start_game_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Game"
+        android:text="SĀKT SPĒLI"
         android:padding="12dp"/>
 
 </LinearLayout>
